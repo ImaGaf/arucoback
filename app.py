@@ -7,6 +7,8 @@ import base64
 from flask_cors import CORS
 from object_detector import HomogeneousBgDetector
 
+print(hasattr(cv2, 'aruco'))  # Debería devolver True si aruco está presente
+
 print(cv2.__version__)
 
 app = Flask(__name__)
