@@ -1,3 +1,7 @@
-https://{default}/:
-    type: upstream
-    upstream: "flask-app:http"
+services:
+  - type: web
+    name: flask-app
+    env: python
+    build_command: "pip install -r requirements.txt"
+    start_command: "gunicorn -b 0.0.0.0:$PORT app:app"
+    dockerfile: Dockerfile
