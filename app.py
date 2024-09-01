@@ -84,7 +84,7 @@ def processimage():
                         (int(x), int(y + 15)), cv2.FONT_HERSHEY_SIMPLEX, 
                         2, (200, 0, 200), 7)
 
-    if not closest_object:
+    if not closest_object: 
         return jsonify({'error': 'No objects close to center detected'}), 400
 
     _, img_encoded = cv2.imencode('.jpg', img)
