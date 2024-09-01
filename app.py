@@ -18,7 +18,7 @@ aruco_dict = cv2.aruco.Dictionary(cv2.aruco.DICT_5X5_100, 5)
 detector = HomogeneousBgDetector()
 
 @app.route('/process_image', methods=['POST'])
-def process_image():
+def processimage():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
 
