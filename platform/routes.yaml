@@ -3,5 +3,5 @@ services:
     name: flask-app
     env: python
     build_command: "pip install -r requirements.txt"
-    start_command: "gunicorn -b 0.0.0.0:$PORT app:app"
+    start_command: "gunicorn -b 0.0.0.0:$PORT app:process_image()"
     dockerfile: Dockerfile
