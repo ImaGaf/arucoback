@@ -1,4 +1,5 @@
 import cv2
+import cv2.aruco as aruco
 import numpy as np
 from flask import Flask, request, jsonify
 import io
@@ -37,7 +38,7 @@ def processimage():
     elif img.shape[2] == 4:
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
 
-    corners, ids, _ = cv2.aruco.detectMarkers(img, aruco_dict, parameters=parameters)
+    corners, ids, _ = aruco.detectMarkers(img, aruco_dict, parameters=parameters)
 
     if ids is None:
         return jsonify({'error': 'No Aruco marker detected'}), 400
