@@ -8,10 +8,6 @@ import base64
 from flask_cors import CORS
 from object_detector import HomogeneousBgDetector
 
-print(hasattr(cv2, 'aruco'))  # Debería devolver True si aruco está presente
-
-print(cv2.__version__)
-
 app = Flask(__name__)
 CORS(app)
 
@@ -65,8 +61,8 @@ def processimage():
         rect = cv2.minAreaRect(cnt)
         (x, y), (w, h), angle = rect
 
-        object_width = w / pixel_cm_ratio
-        object_height = h / pixel_cm_ratio
+        object_width = float(w / pixel_cm_ratio)  # Convert to float
+        object_height = float(h / pixel_cm_ratio)  # Convert to float
         
         object_center_x, object_center_y = int(x), int(y)
         distance = np.sqrt((object_center_x - center_x) ** 2 + (object_center_y - center_y) ** 2)
