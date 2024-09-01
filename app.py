@@ -6,6 +6,8 @@ from PIL import Image
 import base64
 from flask_cors import CORS
 from object_detector import HomogeneousBgDetector
+print(cv2.__version__)
+print(cv2.__version__)
 
 app = Flask(__name__)
 CORS(app)
