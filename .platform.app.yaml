@@ -1,0 +1,25 @@
+name: flask-app
+
+type: "python:3.9"
+
+build:
+    commands:
+        build: pip install -r requirements.txt
+
+mounts:
+    "/var/www/uploads": "shared:files/uploads"
+
+web:
+    commands:
+        start: gunicorn -w 4 -b 0.0.0.0:8000 app:app
+
+disk: 2048
+
+relationships:
+    database: "mysql:mysql"
+
+# Variables de entorno
+variables:
+    env:
+        FLASK_ENV: "production"
+        FLASK_DEBUG: "false"
