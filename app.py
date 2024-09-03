@@ -52,7 +52,7 @@ def process_image():
     cv2.aruco.drawDetectedMarkers(img, corners, ids)
 
     # Tamaño del ArUco en cm
-    aruco_size_cm = 5
+    aruco_size_cm = 7
 
     # Calcular la relación píxel/cm
     side_length_pixels = np.linalg.norm(corners[0][0][0] - corners[0][0][1])
