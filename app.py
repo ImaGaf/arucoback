@@ -11,13 +11,21 @@ from object_detector import HomogeneousBgDetector
 app = Flask(__name__)
 CORS(app)
 
+# Ajuste de parámetros de detección de ArUco
 parameters = cv2.aruco.DetectorParameters()
-aruco_dict = cv2.aruco.Dictionary(cv2.aruco.DICT_5X5_100, 5)
+parameters.adaptiveThreshWinSizeMin = 3
+parameters.adaptiveThreshWinSizeMax = 23
+parameters.adaptiveThreshWinSizeStep = 10
+parameters.minMarkerPerimeterRate = 0.03
+parameters.maxMarkerPerimeterRate = 4.0
+
+# Diccionario ArUco
+aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_100)
 
 detector = HomogeneousBgDetector()
 
 @app.route('/process_image', methods=['POST'])
-def processimage():
+def process_image():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
 
@@ -29,11 +37,13 @@ def processimage():
     img = Image.open(in_memory_file)
     img = np.array(img)
     
+    # Asegurarse de que la imagen esté en formato BGR
     if img.ndim == 2:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     elif img.shape[2] == 4:
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
 
+    # Detección de marcadores ArUco
     corners, ids, _ = aruco.detectMarkers(img, aruco_dict, parameters=parameters)
 
     if ids is None:
@@ -41,8 +51,10 @@ def processimage():
 
     cv2.aruco.drawDetectedMarkers(img, corners, ids)
 
-    aruco_size_cm = 3.3
+    # Tamaño del ArUco en cm
+    aruco_size_cm = 5
 
+    # Calcular la relación píxel/cm
     side_length_pixels = np.linalg.norm(corners[0][0][0] - corners[0][0][1])
     pixel_cm_ratio = side_length_pixels / aruco_size_cm
 
@@ -61,8 +73,8 @@ def processimage():
         rect = cv2.minAreaRect(cnt)
         (x, y), (w, h), angle = rect
 
-        object_width = float(w / pixel_cm_ratio)  # Convert to float
-        object_height = float(h / pixel_cm_ratio)  # Convert to float
+        object_width = float(w / pixel_cm_ratio)
+        object_height = float(h / pixel_cm_ratio)
         
         object_center_x, object_center_y = int(x), int(y)
         distance = np.sqrt((object_center_x - center_x) ** 2 + (object_center_y - center_y) ** 2)
